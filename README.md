@@ -1,63 +1,65 @@
-**Concurrent Resource Management System**
-=========================================
+**⚡ Concurrent Resource Management System**
+===========================================
 
-**Overview**
-------------
+**📌 Overview**
+---------------
 
-This project implements a **concurrent resource management system** using **POSIX threads (pthreads), mutexes, condition variables, and semaphores**. It models a scenario where multiple users (clients) access a **shared resource with limited capacity**, while maintenance (cleaning) operations must occasionally take place, requiring exclusive access.
+This project implements a **concurrent resource management system** using **POSIX threads (pthreads), mutexes, condition variables, and semaphores**. It models a scenario where multiple **clients** access a **shared resource with limited capacity**, while **maintenance operations** require **exclusive access**.
 
 The system ensures that:\
-✅ Multiple clients can access the resource simultaneously, up to a defined capacity.\
-✅ Maintenance operations **block client access** until they complete.\
-✅ Clients must **wait if the resource is full** or if maintenance is in progress.\
-✅ Synchronization ensures **safe concurrent access** without race conditions.
-
-**Features**
-------------
-
--   **Resource Capacity Control**: Ensures only a limited number of clients can use the resource at a time.
--   **Exclusive Maintenance Access**: Blocks new clients while maintenance is ongoing.
--   **Thread Synchronization**: Uses mutexes, semaphores, and condition variables to prevent race conditions.
--   **Non-Blocking Behavior**: Clients attempting to enter a full resource must wait.
+✅ Multiple **clients** can access the resource **simultaneously**, up to a defined capacity.\
+✅ **Maintenance operations** **block client access** until they complete.\
+✅ Clients must **wait** if the resource is **full** or **maintenance is in progress**.\
+✅ **Synchronization mechanisms** prevent **race conditions** and ensure safe **concurrent access**.
 
 * * * * *
 
-**Implementation Details**
---------------------------
+**✨ Features**
+--------------
+
+🔹 **Resource Capacity Control**: Ensures only a limited number of clients can use the resource at a time.\
+🔹 **Exclusive Maintenance Access**: Blocks new clients while maintenance is ongoing.\
+🔹 **Thread Synchronization**: Uses mutexes, semaphores, and condition variables to prevent race conditions.\
+🔹 **Non-Blocking Behavior**: Clients attempting to enter a full resource **must wait**.
+
+* * * * *
+
+**🔧 Implementation Details**
+-----------------------------
 
 ### **1️⃣ Core Components**
 
-### **🔹 `dining.c` (Resource Management Logic)**
+### **📂 `resource_manager.c` (Resource Management Logic)**
 
--   **Initializes the system (`dining_init`)** with a specified capacity.
--   **Clients (`dining_client_enter`, `dining_client_leave`)**:
-    -   Clients can enter if there is space and no maintenance is in progress.
-    -   If full, they wait for an available slot.
--   **Maintenance (`dining_maintenance_enter`, `dining_maintenance_leave`)**:
-    -   Can only begin when all clients leave.
-    -   Blocks new clients from entering until completed.
--   Uses **mutexes** and **condition variables** for synchronization.
+-   **Initializes** the system (`resource_manager_init`) with a **specified capacity**.
+-   **Client Management (`resource_client_enter`, `resource_client_leave`)**:
+    -   Clients **enter** if there is space and **no ongoing maintenance**.
+    -   If full, clients must **wait** for an available slot.
+-   **Maintenance (`resource_maintenance_enter`, `resource_maintenance_leave`)**:
+    -   **Can only start** once all clients have **left**.
+    -   **Prevents new clients** from entering until completed.
+-   Uses **mutexes** and **condition variables** for **thread synchronization**.
 
-### **🔹 `utils.c` (Helper Functions)**
+### **📂 `resource_utils.c` (Helper Functions)**
 
 -   Defines **client** and **maintenance** structures.
--   Implements **entry and exit behavior** for clients and maintenance.
--   Contains a `msleep()` function for controlled execution timing.
+-   Implements **entry and exit behavior** for **clients** and **maintenance**.
+-   Includes `msleep()` for **controlled execution timing**.
 
-### **🔹 `example1.c` (Basic Usage)**
+### **📂 `example_clients.c` (Basic Usage Example)**
 
 -   Simulates **clients entering and leaving** the resource.
--   Ensures **capacity limits are enforced**.
+-   Ensures **capacity limits** are enforced correctly.
 
-### **🔹 `example2.c` (Client & Maintenance Interactions)**
+### **📂 `example_maintenance.c` (Client & Maintenance Interaction Example)**
 
--   Demonstrates how maintenance blocks new clients.
--   Shows clients waiting when **maintenance is in progress**.
+-   Demonstrates how **maintenance operations block new clients**.
+-   Shows **clients waiting** when **maintenance is in progress**.
 
 * * * * *
 
-**💻 Usage**
-------------
+**💻 How to Use**
+-----------------
 
 ### **🔧 Building the Project**
 
@@ -69,27 +71,27 @@ Ensure you have **GCC and Make** installed, then compile using:
 
 To test how clients and maintenance interact:
 
-`./example1`
+`./example_clients`
 
 or
 
-`./example2`
+`./example_maintenance`
 
 ### **📥 Input**
 
--   **Maximum Resource Capacity** (defined in `dining_init`).
--   **Client and Maintenance Requests** (handled by functions like `dining_client_enter`).
+-   **Maximum Resource Capacity** (set in `resource_manager_init`).
+-   **Client and Maintenance Requests** (handled via `resource_client_enter`, `resource_maintenance_enter`, etc.).
 
 ### **📤 Output**
 
--   Logs of **clients entering/leaving**.
--   Messages when **maintenance begins and ends**.
--   Demonstrates **synchronization and concurrency control**.
+-   **Logs of clients entering/leaving**.
+-   **Messages when maintenance starts and ends**.
+-   **Synchronization demonstration** ensuring **safe concurrent access**.
 
 * * * * *
 
-**Example Execution Logs**
---------------------------
+**📊 Example Execution Logs**
+-----------------------------
 
 ### **Example 1: Clients Entering & Leaving**
 
@@ -123,9 +125,9 @@ or
 **🔮 Future Enhancements**
 --------------------------
 
-✅ Add **priority scheduling** for urgent maintenance requests.\
-✅ Implement **timeouts** for waiting clients.\
-✅ Extend to **multi-resource environments**.
+✅ **Priority scheduling** for urgent maintenance requests.\
+✅ **Timeouts** for clients waiting to enter.\
+✅ **Multi-resource environments** for complex scenarios.
 
 * * * * *
 
